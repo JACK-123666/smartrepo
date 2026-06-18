@@ -23,15 +23,15 @@ python -m venv .venv
 .venv\Scripts\activate          # Windows (PowerShell)
 # source .venv/bin/activate     # macOS / Linux
 
-# 3. 安装项目(可编辑模式,自动装依赖)
+# 3. 安装项目
 pip install -e .
 ```
 
-开发依赖(含 pytest):`pip install -e ".[dev]"`。
+开发依赖:`pip install -e ".[dev]"`。
 
 ## 配置 API Key
 
-三选一(或多个)。在项目根建 `.env` 文件(已被 `.gitignore` 忽略,不会提交):
+三选一(或多个)。在项目根建 `.env` 文件,填入 API Key:
 
 ```bash
 # .env
@@ -95,7 +95,7 @@ with SmartRepo() as sr:
     session = await sr.resume(session_id=sessions[0])
 ```
 
-## 原理(简)
+## 原理
 
 主循环:**模型调用 → 工具执行 → 检查点**,循环到任务完成或达轮次上限。
 
