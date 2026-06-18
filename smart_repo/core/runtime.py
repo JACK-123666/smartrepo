@@ -74,8 +74,8 @@ class SmartRepo:
         self,
         workspace_dir: str | Path = ".",
         config: Config | None = None,
-        model: str = "",
-        provider: str = "",
+        model: str | None = None,
+        provider: str | None = None,
     ) -> None:
         """初始化 SmartRepo 框架——创建并连接所有子系统。
 
@@ -109,6 +109,11 @@ class SmartRepo:
         # Model registry & provider
         self.model_registry = ModelRegistry()
         api_key = self.config.resolve_api_key(self.provider_name)
+        # 若该 provider 的 key 未配置，自动选一个已配 key 的 provider，
+        # 免去每次都得 -p 指定（如只配了 DeepSeek，直接 smart-repo run 即可）
+        if not api_key:
+            self.provider_name, self.model = self._auto_select_provider(user_model=model)
+            api_key = self.config.resolve_api_key(self.provider_name)
         self.provider = self.model_registry.create(
             self.model, api_key=api_key,
         )
@@ -178,6 +183,22 @@ class SmartRepo:
         # 当前活跃会话引用（Active session）
         self._current_session: Session | None = None
         self._interrupted = False
+
+    def _auto_select_provider(self, user_model: str | None = None) -> tuple[str, str]:
+        """按优先级选第一个已配置 API key 的 provider 及其默认模型。
+
+        user_model 非空时保留用户显式指定的模型，只切换 provider。
+        若都没有 key，返回当前值（交由 provider 自行报 key 错误）。
+        """
+        candidates = [
+            ("claude", "claude-sonnet-4-6"),
+            ("openai", "gpt-4o"),
+            ("deepseek", "deepseek-chat"),
+        ]
+        for name, default_model in candidates:
+            if self.config.resolve_api_key(name):
+                return name, user_model or default_model
+        return self.provider_name, self.model
 
     # =========================================================================
     # 主入口：运行和恢复（Main Entry Points: run & resume）

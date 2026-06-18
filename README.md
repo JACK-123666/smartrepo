@@ -15,8 +15,8 @@
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/<your-username>/SmartRepo.git
-cd SmartRepo
+git clone https://github.com/JACK-123666/smartrepo.git
+cd smartrepo
 
 # 2. 创建并激活虚拟环境
 python -m venv .venv

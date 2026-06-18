@@ -133,8 +133,8 @@ async def cmd_run(args) -> int:
     with SmartRepo(
         workspace_dir=workspace,
         config=config,
-        model=args.model or config.default_model,
-        provider=args.provider or config.default_provider,
+        model=args.model,
+        provider=args.provider,
     ) as sr:
         if args.interactive:
             sr.approval.approval_callback = interactive_approval
