@@ -1,0 +1,31 @@
+# === 密钥 / 环境变量===
+.env
+.env.*
+!.env.example
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+build/
+dist/
+
+# === 测试 / 覆盖率 ===
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# === 运行时生成的检查点 / 记忆 ===
+.smartrepo/
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+
+# === OS ===
+.DS_Store
+Thumbs.db
